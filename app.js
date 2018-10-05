@@ -13,3 +13,23 @@ GAME RULES:
  */
 let roundScore = [];
 let globalScore = [];
+
+/* Define function that resets the game.
+ */
+function resetGame() {
+    const currentScores = document.getElementsByClassName('player-current-score'); // Select the HTML elements that have class of '.player-current-score'.
+    const roundScores = document.getElementsByClassName('player-score'); // Select the HTML elements that have class of '.player-score'.
+    const dice = document.getElementsByClassName('dice'); // Select the HTML img element that shows the dice.
+
+    //Reset all scores.
+    for (let i = 0; i < 2; i++) {
+        currentScores[i].textContent = '0'; //Set the player current scores to 0.
+        roundScores[i].textContent = '0'; // Set the player round scores to 0.
+    }
+
+    //Hide the dice.
+    dice[0].setAttribute('style','display:none;');
+}
+
+//Reset the game.
+resetGame();
