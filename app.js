@@ -34,9 +34,13 @@ function resetGame() {
 //Reset the game.
 resetGame();
 
+/* Generate random dice roll.
+ */
+function generateDice() {
+    const randomDiceNumber = Math.floor(Math.random() * 7); // Generate random number.
+}
+
 /* Add click event listener on button with class 'btn-roll'.
-* */
+ */
 rollBtn = document.getElementsByClassName('btn-roll')[0]; // Select dice roll button.
 rollBtn.addEventListener('click', generateDice, false); // Add event listener.
-
-function generateDice() {}
