@@ -19,7 +19,7 @@ let globalScore = [];
 function resetGame() {
     const currentScores = document.getElementsByClassName('player-current-score'); // Select the HTML elements that have class of '.player-current-score'.
     const roundScores = document.getElementsByClassName('player-score'); // Select the HTML elements that have class of '.player-score'.
-    const dice = document.getElementsByClassName('dice'); // Select the HTML img element that shows the dice.
+    const dice = document.getElementsByClassName('dice')[0]; // Select the HTML img element that shows the dice.
 
     //Reset all scores.
     for (let i = 0; i < 2; i++) {
@@ -28,8 +28,15 @@ function resetGame() {
     }
 
     //Hide the dice.
-    dice[0].setAttribute('style','display:none;');
+    dice.setAttribute('style','display:none;');
 }
 
 //Reset the game.
 resetGame();
+
+/* Add click event listener on button with class 'btn-roll'.
+* */
+rollBtn = document.getElementsByClassName('btn-roll')[0]; // Select dice roll button.
+rollBtn.addEventListener('click', generateDice, false); // Add event listener.
+
+function generateDice() {}
