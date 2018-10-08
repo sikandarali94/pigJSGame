@@ -66,6 +66,10 @@ function changePlayer() {
         playerTurn--; // Change to player 0 if player 1 is current player.
     }
 
+    //Hide the dice.
+    dice.setAttribute('style','display:none;');
+    imgHidden = true; // Indicate dice is hidden.
+
     const panelClassNameSwitchedPlayer = panelClassName + ' active'; // Variable holds the class of the panel of the player that is now active.
 
     panelPlayer[playerTurn].setAttribute('class', panelClassNameSwitchedPlayer); // Set the class attribute of the panel of the player that is now active.
