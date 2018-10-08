@@ -19,7 +19,7 @@ let playerTurn = 0; // 0 indicates player 0 is playing; 1 indicates player 1 is 
 const currentScores = document.getElementsByClassName('player-current-score'); // Select the HTML elements that have class of '.player-current-score'.
 const roundScores = document.getElementsByClassName('player-score'); // Select the HTML elements that have class of '.player-score'.
 const dice = document.getElementsByClassName('dice')[0]; // Select the HTML img element that shows the dice.
-const roundScorePlayer = [document.getElementById('score-0'), document.getElementById('score-1')]; // Select the HTML elements that show players' round scores.
+const roundScorePlayer = [document.getElementById('current-0'), document.getElementById('current-1')]; // Select the HTML elements that show players' round scores.
 
 /* Define function that resets the game.
  */
