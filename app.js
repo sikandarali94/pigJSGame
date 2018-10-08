@@ -20,6 +20,8 @@ const currentScores = document.getElementsByClassName('player-current-score'); /
 const roundScores = document.getElementsByClassName('player-score'); // Select the HTML elements that have class of '.player-score'.
 const dice = document.getElementsByClassName('dice')[0]; // Select the HTML img element that shows the dice.
 const roundScorePlayer = [document.getElementById('current-0'), document.getElementById('current-1')]; // Select the HTML elements that show players' round scores.
+const panelPlayer = [document.getElementsByClassName('player-0-panel')[0], document.getElementsByClassName('player-1-panel')[0]]; // Select the HTML elements that show the players' panels.
+const rollBtn = document.getElementsByClassName('btn-roll')[0]; // Select dice roll button.
 
 /* Define function that resets the game.
  */
@@ -45,19 +47,33 @@ function generateRandomDiceNumber() {
     return Math.floor((Math.random() * 6) + 1); // Generate random number between 1 and 6.
 }
 
+/* Function changes the player and modifies the style of the player panels to indicate the player that is active and
+the player that is non-active.
+ */
+function changePlayer() {
+    roundScore[playerTurn] = 0; // Reset the player round score if dice roll is 1.
+    roundScorePlayer[playerTurn].textContent = '0'; // Show player round score has been reset.
+    const panelClassName = 'player-' + playerTurn + '-panel'; // Variable holds the class attribute of the panel of the player that is now non-active.
+    panelPlayer[playerTurn].setAttribute('class', panelClassName); // Set the class attribute of the panel of the player that is now non-active.
+
+    /* Change player turn.
+     */
+    if (playerTurn === 0) {
+        playerTurn++; // Change to player 1 if player 0 is current player.
+    } else {
+        playerTurn--; // Change to player 0 if player 1 is current player.
+    }
+
+    const panelClassNameSwitchedPlayer = panelClassName + ' active'; // Variable holds the class of the panel of the player that is now active.
+
+    panelPlayer[playerTurn].setAttribute('class', panelClassNameSwitchedPlayer); // Set the class attribute of the panel of the player that is now active.
+}
+
 /* This function changer the round score depending on dice roll.
  */
 function alterRoundScore(diceNumber) {
     if (diceNumber === 1) {
-        roundScore[playerTurn] = 0; // Reset the player round score if dice roll is 1.
-        roundScorePlayer[playerTurn].textContent = '0'; // Show player round score has been reset.
-        /* Change player turn.
-         */
-        if (playerTurn === 0) {
-            playerTurn++;
-        } else {
-            playerTurn--;
-        }
+        changePlayer(); // Call function that changes player.
     } else {
         roundScore[playerTurn] += diceNumber; // Add dice roll to player round score.
         roundScorePlayer[playerTurn].textContent = roundScore[playerTurn]; // Show total round score after dice roll.
@@ -82,5 +98,4 @@ function generateDice() {
 
 /* Add click event listener on button with class 'btn-roll'.
  */
-rollBtn = document.getElementsByClassName('btn-roll')[0]; // Select dice roll button.
 rollBtn.addEventListener('click', generateDice, false); // Add event listener.
