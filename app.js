@@ -19,9 +19,11 @@ let playerTurn = 0; // 0 indicates player 0 is playing; 1 indicates player 1 is 
 const currentScores = document.getElementsByClassName('player-current-score'); // Select the HTML elements that have class of '.player-current-score'.
 const roundScores = document.getElementsByClassName('player-score'); // Select the HTML elements that have class of '.player-score'.
 const dice = document.getElementsByClassName('dice')[0]; // Select the HTML img element that shows the dice.
+const globalScorePlayer = [document.getElementById('score-0'), document.getElementById('score-1')]; // Select the HTML elements that show the players' global score.
 const roundScorePlayer = [document.getElementById('current-0'), document.getElementById('current-1')]; // Select the HTML elements that show players' round scores.
 const panelPlayer = [document.getElementsByClassName('player-0-panel')[0], document.getElementsByClassName('player-1-panel')[0]]; // Select the HTML elements that show the players' panels.
 const rollBtn = document.getElementsByClassName('btn-roll')[0]; // Select dice roll button.
+const hldBtn = document.getElementsByClassName('btn-hold')[0]; // Select the hold button.
 
 /* Define function that resets the game.
  */
@@ -96,6 +98,18 @@ function generateDice() {
     alterRoundScore(randomDiceNumber); // Call function that changes the round score depending on dice roll.
 }
 
+/* Function adds current round score of active player to global score and changes player turn.
+ */
+function hldAddGlobalScore() {
+    globalScore[playerTurn] += roundScore[playerTurn]; // Add current player's round score to global score.
+    globalScorePlayer[playerTurn].textContent = globalScore[playerTurn]; // Display the updated global score.
+    changePlayer(); // Call function that changes player.
+}
+
 /* Add click event listener on button with class 'btn-roll'.
  */
 rollBtn.addEventListener('click', generateDice, false); // Add event listener.
+
+/* Add click event listener on button with class 'btn-hold'.
+ */
+hldBtn.addEventListener('click', hldAddGlobalScore, false); // Add event listener.
