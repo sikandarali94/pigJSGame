@@ -16,10 +16,12 @@ let globalScore = [0,0]; // Initialize global scores for both players starting f
 let imgHidden = false; // false indicates dice image is shown; true indicates dice image is hidden.
 let playerTurn = 0; // 0 indicates player 0 is playing; 1 indicates player 1 is playing.
 let gameEnd = false; // false indicates that game is still being played; true indicates that the game is over.
+let winnerAnnounced = false; //false indicates winner has not been announced; true indicates winner has been announced.
 
 const currentScores = document.getElementsByClassName('player-current-score'); // Select the HTML elements that have class of '.player-current-score'.
 const roundScores = document.getElementsByClassName('player-score'); // Select the HTML elements that have class of '.player-score'.
 const dice = document.getElementsByClassName('dice')[0]; // Select the HTML img element that shows the dice.
+const playerName = [document.getElementById('name-0'), document.getElementById('name-1')]; // Select the HTML elements that show the players' names.
 const globalScorePlayer = [document.getElementById('score-0'), document.getElementById('score-1')]; // Select the HTML elements that show the players' global score.
 const roundScorePlayer = [document.getElementById('current-0'), document.getElementById('current-1')]; // Select the HTML elements that show players' round scores.
 const panelPlayer = [document.getElementsByClassName('player-0-panel')[0], document.getElementsByClassName('player-1-panel')[0]]; // Select the HTML elements that show the players' panels.
@@ -91,6 +93,8 @@ function callWinner() {
 
     const panelClassNameWinner = 'player-' + playerTurn + '-panel winner'; // Variable holds the class attribute of the panel of the player that has won.
     panelPlayer[playerTurn].setAttribute('class', panelClassNameWinner); // Set the class attribute of the panel of the player that has won.
+    playerName[playerTurn].textContent = 'Winner!'; // The player that has won has the current turn and their name should be replaced with 'Winner!'.
+    winnerAnnounced = true; // Indicate winner has been announced.
     dice.setAttribute('style','display:none;'); //Hide the dice.
     imgHidden = true; // Indicate dice is hidden.
 }
@@ -112,6 +116,13 @@ function hldAddGlobalScore() {
  */
 function newGame() {
     gameEnd = true; //Indicate game has ended.
+    // If winner has been announced.
+    if (winnerAnnounced) {
+        /* If a player has won that means that player has the current turn. Reset the player's name from 'Winner!' to
+        the default name because new game has been declared.
+         */
+        playerName[playerTurn].textContent = 'Player ' + playerTurn;
+    }
     resetGame(); //Reset the game.
 }
 
