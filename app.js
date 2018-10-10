@@ -15,6 +15,7 @@ let roundScore = [0,0]; // Initialize round scores for both players starting fro
 let globalScore = [0,0]; // Initialize global scores for both players starting from 0.
 let imgHidden = false; // false indicates dice image is shown; true indicates dice image is hidden.
 let playerTurn = 0; // 0 indicates player 0 is playing; 1 indicates player 1 is playing.
+let gameEnd = false; // false indicates that game is still being played; true indicates that the game is over.
 
 const currentScores = document.getElementsByClassName('player-current-score'); // Select the HTML elements that have class of '.player-current-score'.
 const roundScores = document.getElementsByClassName('player-score'); // Select the HTML elements that have class of '.player-score'.
@@ -24,24 +25,7 @@ const roundScorePlayer = [document.getElementById('current-0'), document.getElem
 const panelPlayer = [document.getElementsByClassName('player-0-panel')[0], document.getElementsByClassName('player-1-panel')[0]]; // Select the HTML elements that show the players' panels.
 const rollBtn = document.getElementsByClassName('btn-roll')[0]; // Select dice roll button.
 const hldBtn = document.getElementsByClassName('btn-hold')[0]; // Select the hold button.
-
-/* Define function that resets the game.
- */
-function resetGame() {
-
-    //Reset all scores.
-    for (let i = 0; i < 2; i++) {
-        currentScores[i].textContent = '0'; //Set the player current scores to 0.
-        roundScores[i].textContent = '0'; // Set the player round scores to 0.
-    }
-
-    //Hide the dice.
-    dice.setAttribute('style','display:none;');
-    imgHidden = true; // Indicate dice is hidden.
-}
-
-//Reset the game.
-resetGame();
+const newBtn = document.getElementsByClassName('btn-new')[0]; // Select the new game button.
 
 /* Function outputs random number between 1 and 6.
  */
@@ -66,8 +50,7 @@ function changePlayer() {
         playerTurn--; // Change to player 0 if player 1 is current player.
     }
 
-    //Hide the dice.
-    dice.setAttribute('style','display:none;');
+    dice.setAttribute('style','display:none;'); //Hide the dice.
     imgHidden = true; // Indicate dice is hidden.
 
     const panelClassNameSwitchedPlayer = panelClassName + ' active'; // Variable holds the class of the panel of the player that is now active.
@@ -102,18 +85,75 @@ function generateDice() {
     alterRoundScore(randomDiceNumber); // Call function that changes the round score depending on dice roll.
 }
 
+function callWinner() {
+    rollBtn.removeEventListener('click', generateDice); // Remove roll button event listener because game has been won.
+    hldBtn.removeEventListener('click', hldAddGlobalScore); // Remove hold button event listener because game has been won.
+
+    const panelClassNameWinner = 'player-' + playerTurn + '-panel winner'; // Variable holds the class attribute of the panel of the player that has won.
+    panelPlayer[playerTurn].setAttribute('class', panelClassNameWinner); // Set the class attribute of the panel of the player that has won.
+    dice.setAttribute('style','display:none;'); //Hide the dice.
+    imgHidden = true; // Indicate dice is hidden.
+}
+
 /* Function adds current round score of active player to global score and changes player turn.
  */
 function hldAddGlobalScore() {
     globalScore[playerTurn] += roundScore[playerTurn]; // Add current player's round score to global score.
     globalScorePlayer[playerTurn].textContent = globalScore[playerTurn]; // Display the updated global score.
-    changePlayer(); // Call function that changes player.
+    // Check if player's score equalled or exceeded 100.
+    if (globalScore[playerTurn] >= 100) {
+        callWinner(); // Declare winner.
+    } else {
+        changePlayer(); // Call function that changes player.
+    }
 }
 
-/* Add click event listener on button with class 'btn-roll'.
+/* Generate a new game.
  */
-rollBtn.addEventListener('click', generateDice, false); // Add event listener.
+function newGame() {
+    gameEnd = true; //Indicate game has ended.
+    resetGame(); //Reset the game.
+}
 
-/* Add click event listener on button with class 'btn-hold'.
+/* Define function that resets the game.
  */
-hldBtn.addEventListener('click', hldAddGlobalScore, false); // Add event listener.
+function resetGame() {
+    if (gameEnd === true) {
+        for (let i = 1; i >= 0; i--) {
+            roundScore[i] = 0; // Reset the round score of a player.
+            globalScore[i] = 0; // Reset the global score of a player.
+            if (i === 1) {
+                panelPlayer[i].setAttribute('class', 'player-1-panel'); // Set the default class attribute of player 1.
+            } else {
+                playerTurn = i; // Set turn to player 0.
+                panelPlayer[i].setAttribute('class', 'player-0-panel active'); //Set the default class attribute of player 0 and make it active.
+            }
+            roundScorePlayer[i].textContent = '0'; // Reset displayed round score of a player.
+            globalScorePlayer[i].textContent = '0'; // Reset displayed global score of a player.
+        }
+        gameEnd = false; // Indicate game has started.
+    }
+    /* Add click event listener on button with class 'btn-roll'.
+     */
+    rollBtn.addEventListener('click', generateDice, false); // Add event listener.
+
+    /* Add click event listener on button with class 'btn-hold'.
+     */
+    hldBtn.addEventListener('click', hldAddGlobalScore, false); // Add event listener.
+
+    //Reset all scores.
+    for (let i = 0; i < 2; i++) {
+        currentScores[i].textContent = '0'; //Set the player current scores to 0.
+        roundScores[i].textContent = '0'; // Set the player round scores to 0.
+    }
+
+    dice.setAttribute('style','display:none;'); //Hide the dice.
+    imgHidden = true; // Indicate dice is hidden.
+}
+
+/* Add click event listener on button with class 'btn-new'.
+ */
+newBtn.addEventListener('click', newGame, false);
+
+//Start the game.
+resetGame();
