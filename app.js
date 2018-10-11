@@ -17,6 +17,7 @@ let imgHidden = false; // false indicates dice image is shown; true indicates di
 let playerTurn = 0; // 0 indicates player 0 is playing; 1 indicates player 1 is playing.
 let gameEnd = false; // false indicates that game is still being played; true indicates that the game is over.
 let winnerAnnounced = false; //false indicates winner has not been announced; true indicates winner has been announced.
+let previousDiceRoll = null;
 
 const currentScores = document.getElementsByClassName('player-current-score'); // Select the HTML elements that have class of '.player-current-score'.
 const roundScores = document.getElementsByClassName('player-score'); // Select the HTML elements that have class of '.player-score'.
@@ -39,6 +40,7 @@ function generateRandomDiceNumber() {
 the player that is non-active.
  */
 function changePlayer() {
+    previousDiceRoll = null; // Indicate that the new player has not rolled a previous die in the current turn.
     roundScore[playerTurn] = 0; // Reset the player round score if dice roll is 1.
     roundScorePlayer[playerTurn].textContent = '0'; // Show player round score has been reset.
     const panelClassName = 'player-' + playerTurn + '-panel'; // Variable holds the class attribute of the panel of the player that is now non-active.
@@ -65,9 +67,14 @@ function changePlayer() {
 function alterRoundScore(diceNumber) {
     if (diceNumber === 1) {
         changePlayer(); // Call function that changes player.
+    } else if (diceNumber === 6 && previousDiceRoll === 6) { // If a player rolls a 6 consecutively.
+        globalScore[playerTurn] = 0; // Player loses his entire score.
+        globalScorePlayer[playerTurn].textContent = '0'; // Display that the global score is now 0.
+        changePlayer(); // Call function that changes player.
     } else {
         roundScore[playerTurn] += diceNumber; // Add dice roll to player round score.
         roundScorePlayer[playerTurn].textContent = roundScore[playerTurn]; // Show total round score after dice roll.
+        previousDiceRoll = diceNumber; // Save the previous dice roll.
     }
 }
 
