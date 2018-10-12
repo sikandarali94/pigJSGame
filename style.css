@@ -145,9 +145,12 @@ i {
     position:absolute;
     left:50%;
     transform:translateX(-50%);
-    top:520px;
+    top:530px;
     padding:10px;
     text-align: center;
+    text-transform:uppercase;
+    font-size:20px;
+    width:30%;
 }
 
 .dice {

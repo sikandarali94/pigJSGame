@@ -109,10 +109,12 @@ function callWinner() {
 /* Function adds current round score of active player to global score and changes player turn.
  */
 function hldAddGlobalScore() {
+    const finalScoreInput = document.getElementById('final-score').value;
+    const winningScore = finalScoreInput ? finalScoreInput : 100;
     globalScore[playerTurn] += roundScore[playerTurn]; // Add current player's round score to global score.
     globalScorePlayer[playerTurn].textContent = globalScore[playerTurn]; // Display the updated global score.
     // Check if player's score equalled or exceeded 100.
-    if (globalScore[playerTurn] >= 100) {
+    if (globalScore[playerTurn] >= winningScore) {
         callWinner(); // Declare winner.
     } else {
         changePlayer(); // Call function that changes player.
